@@ -19,7 +19,7 @@ export const findWorkspaceBySlug = async (slug) => {
     return result[0] || null;
 };
 
-// Create workspace and add creator as owner
+// Create workspace and automatically add creator as owner
 export const createWorkspace = async (workspaceData, userId) => {
     return await db.transaction(async (tx) => {
         const [workspace] = await tx
@@ -75,7 +75,7 @@ export const findWorkspaceById = async (workspaceId) => {
     return result[0] || null;
 };
 
-// Check user's membership in a workspace
+// Find membership for a specific user in a specific workspace
 export const findWorkspaceMembership = async (workspaceId, userId) => {
     const result = await db
         .select()
@@ -90,6 +90,7 @@ export const findWorkspaceMembership = async (workspaceId, userId) => {
 
     return result[0] || null;
 };
+
 // Update workspace
 export const updateWorkspace = async (workspaceId, updateData) => {
     const result = await db
