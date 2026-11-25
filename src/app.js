@@ -9,6 +9,7 @@ import { swaggerSpec } from './config/swagger.js';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import workspaceRoutes from './routes/workspace.routes.js';
+import workspaceMemberRoutes from './routes/workspaceMember.routes.js';
 import { globalErrorHandler } from './utils/AppError.js';
 
 const app = express();
@@ -49,6 +50,7 @@ app.use(
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/workspaces', workspaceRoutes);
+app.use('/api/v1/workspaces', workspaceMemberRoutes);
 
 // Error handler must be registered after all routes
 app.use(globalErrorHandler);

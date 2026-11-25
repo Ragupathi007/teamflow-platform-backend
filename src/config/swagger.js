@@ -33,6 +33,10 @@ const swaggerOptions = {
             {
                 name: 'Workspaces',
                 description: 'Workspace management endpoints'
+            },
+            {
+                name: 'Workspace Members',
+                description: 'Workspace membership and role management endpoints'
             }
         ],
         components: {
@@ -372,6 +376,158 @@ const swaggerOptions = {
                         message: {
                             type: 'string',
                             example: 'Workspace deleted successfully'
+                        }
+                    }
+                },
+                AddWorkspaceMemberRequest: {
+                    type: 'object',
+                    required: ['email'],
+                    properties: {
+                        email: {
+                            type: 'string',
+                            format: 'email',
+                            example: 'grace@example.com',
+                            description:
+                                'Email of an existing registered user to add to the workspace.'
+                        },
+                        role: {
+                            type: 'string',
+                            enum: ['admin', 'member'],
+                            default: 'member',
+                            example: 'member',
+                            description:
+                                'Role assigned to the new member. Only the workspace owner can assign admin.'
+                        }
+                    }
+                },
+                UpdateWorkspaceMemberRequest: {
+                    type: 'object',
+                    required: ['role'],
+                    properties: {
+                        role: {
+                            type: 'string',
+                            enum: ['admin', 'member'],
+                            example: 'admin',
+                            description:
+                                'New role for the membership. The owner role cannot be changed here.'
+                        }
+                    }
+                },
+                WorkspaceMember: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'string',
+                            format: 'uuid',
+                            example: '7c9e6679-7425-40de-944b-e07fc1f90ae7',
+                            description:
+                                'ID of the workspace membership record.'
+                        },
+                        workspaceId: {
+                            type: 'string',
+                            format: 'uuid',
+                            example: '6a1f2c3d-4b5e-6789-abcd-ef0123456789'
+                        },
+                        userId: {
+                            type: 'string',
+                            format: 'uuid',
+                            example: '0f8fad5b-d9cb-469f-a165-70867728950e'
+                        },
+                        name: {
+                            type: 'string',
+                            example: 'Grace Hopper'
+                        },
+                        email: {
+                            type: 'string',
+                            format: 'email',
+                            example: 'grace@example.com'
+                        },
+                        role: {
+                            type: 'string',
+                            enum: ['owner', 'admin', 'member'],
+                            example: 'member'
+                        },
+                        joinedAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            example: '2026-11-25T09:00:00.000Z'
+                        }
+                    }
+                },
+                AddWorkspaceMemberResponse: {
+                    type: 'object',
+                    required: ['success', 'message', 'data'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: true
+                        },
+                        message: {
+                            type: 'string',
+                            example: 'Workspace member added successfully'
+                        },
+                        data: {
+                            $ref: '#/components/schemas/WorkspaceMember'
+                        }
+                    }
+                },
+                GetWorkspaceMembersResponse: {
+                    type: 'object',
+                    required: ['success', 'data'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: true
+                        },
+                        data: {
+                            type: 'array',
+                            items: {
+                                $ref: '#/components/schemas/WorkspaceMember'
+                            }
+                        }
+                    }
+                },
+                GetWorkspaceMemberResponse: {
+                    type: 'object',
+                    required: ['success', 'data'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: true
+                        },
+                        data: {
+                            $ref: '#/components/schemas/WorkspaceMember'
+                        }
+                    }
+                },
+                UpdateWorkspaceMemberResponse: {
+                    type: 'object',
+                    required: ['success', 'message', 'data'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: true
+                        },
+                        message: {
+                            type: 'string',
+                            example: 'Workspace member role updated successfully'
+                        },
+                        data: {
+                            $ref: '#/components/schemas/WorkspaceMember'
+                        }
+                    }
+                },
+                RemoveWorkspaceMemberResponse: {
+                    type: 'object',
+                    required: ['success', 'message'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: true
+                        },
+                        message: {
+                            type: 'string',
+                            example: 'Workspace member removed successfully'
                         }
                     }
                 },
