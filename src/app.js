@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import { swaggerSpec } from './config/swagger.js';
 import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/user.routes.js';
 
 const app = express();
 
@@ -44,5 +45,6 @@ app.use(
 
 // API routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/users', userRoutes);
 
 export default app;

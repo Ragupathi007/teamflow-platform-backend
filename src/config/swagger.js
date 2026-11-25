@@ -25,6 +25,10 @@ const swaggerOptions = {
             {
                 name: 'Auth',
                 description: 'Authentication endpoints'
+            },
+            {
+                name: 'Users',
+                description: 'User profile endpoints'
             }
         ],
         components: {
@@ -89,6 +93,76 @@ const swaggerOptions = {
                             example: '2026-11-24T12:00:00.000Z',
                             description:
                                 'Creation timestamp. Stored in the users.created_at column.'
+                        }
+                    }
+                },
+                UpdateUserRequest: {
+                    type: 'object',
+                    minProperties: 1,
+                    properties: {
+                        name: {
+                            type: 'string',
+                            minLength: 2,
+                            maxLength: 100,
+                            example: 'Ada Lovelace',
+                            description:
+                                'New display name. Stored in the users.name column.'
+                        },
+                        email: {
+                            type: 'string',
+                            format: 'email',
+                            maxLength: 255,
+                            example: 'ada@example.com',
+                            description:
+                                'New unique email address. Stored in the users.email column.'
+                        }
+                    }
+                },
+                UpdatedUser: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'string',
+                            format: 'uuid',
+                            example: '0f8fad5b-d9cb-469f-a165-70867728950e'
+                        },
+                        name: {
+                            type: 'string',
+                            example: 'Ada Lovelace'
+                        },
+                        email: {
+                            type: 'string',
+                            format: 'email',
+                            example: 'ada@example.com'
+                        },
+                        createdAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            example: '2026-11-24T12:00:00.000Z'
+                        },
+                        updatedAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            example: '2026-11-24T12:30:00.000Z',
+                            description:
+                                'Last update timestamp. Stored in the users.updated_at column.'
+                        }
+                    }
+                },
+                UpdateMeResponse: {
+                    type: 'object',
+                    required: ['success', 'message', 'data'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: true
+                        },
+                        message: {
+                            type: 'string',
+                            example: 'Profile updated successfully'
+                        },
+                        data: {
+                            $ref: '#/components/schemas/UpdatedUser'
                         }
                     }
                 },
