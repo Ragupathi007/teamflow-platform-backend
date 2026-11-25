@@ -29,6 +29,10 @@ const swaggerOptions = {
             {
                 name: 'Users',
                 description: 'User profile endpoints'
+            },
+            {
+                name: 'Workspaces',
+                description: 'Workspace management endpoints'
             }
         ],
         components: {
@@ -183,6 +187,194 @@ const swaggerOptions = {
                         }
                     }
                 },
+                Workspace: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'string',
+                            format: 'uuid',
+                            example: '6a1f2c3d-4b5e-6789-abcd-ef0123456789'
+                        },
+                        name: {
+                            type: 'string',
+                            maxLength: 150,
+                            example: 'Engineering Team'
+                        },
+                        slug: {
+                            type: 'string',
+                            maxLength: 100,
+                            example: 'engineering-team',
+                            description:
+                                'URL-friendly identifier generated from the workspace name. Stored in the workspaces.slug column.'
+                        },
+                        description: {
+                            type: 'string',
+                            maxLength: 1000,
+                            nullable: true,
+                            example: 'Workspace for engineering projects'
+                        },
+                        createdBy: {
+                            type: 'string',
+                            format: 'uuid',
+                            example: '0f8fad5b-d9cb-469f-a165-70867728950e',
+                            description:
+                                'ID of the user who created the workspace. Stored in the workspaces.created_by column.'
+                        },
+                        createdAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            example: '2026-11-25T09:00:00.000Z'
+                        },
+                        updatedAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            example: '2026-11-25T09:00:00.000Z'
+                        }
+                    }
+                },
+                WorkspaceWithRole: {
+                    allOf: [
+                        {
+                            $ref: '#/components/schemas/Workspace'
+                        },
+                        {
+                            type: 'object',
+                            properties: {
+                                role: {
+                                    type: 'string',
+                                    enum: ['owner', 'admin', 'member'],
+                                    example: 'owner',
+                                    description:
+                                        'The current user\'s role in the workspace.'
+                                }
+                            }
+                        }
+                    ]
+                },
+                CreateWorkspaceRequest: {
+                    type: 'object',
+                    required: ['name'],
+                    properties: {
+                        name: {
+                            type: 'string',
+                            minLength: 2,
+                            maxLength: 150,
+                            example: 'Engineering Team',
+                            description:
+                                'Workspace name. A URL-friendly slug is generated from it.'
+                        },
+                        description: {
+                            type: 'string',
+                            maxLength: 1000,
+                            example: 'Workspace for engineering projects'
+                        }
+                    }
+                },
+                UpdateWorkspaceRequest: {
+                    type: 'object',
+                    minProperties: 1,
+                    properties: {
+                        name: {
+                            type: 'string',
+                            minLength: 2,
+                            maxLength: 150,
+                            example: 'Engineering Department',
+                            description:
+                                'New workspace name. The slug is not regenerated.'
+                        },
+                        description: {
+                            type: 'string',
+                            maxLength: 1000,
+                            nullable: true,
+                            example: 'Updated workspace description'
+                        }
+                    }
+                },
+                CreateWorkspaceResponse: {
+                    type: 'object',
+                    required: ['success', 'message', 'data'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: true
+                        },
+                        message: {
+                            type: 'string',
+                            example: 'Workspace created successfully'
+                        },
+                        data: {
+                            $ref: '#/components/schemas/Workspace'
+                        }
+                    }
+                },
+                GetWorkspacesResponse: {
+                    type: 'object',
+                    required: ['success', 'message', 'data'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: true
+                        },
+                        message: {
+                            type: 'string',
+                            example: 'Workspaces retrieved successfully'
+                        },
+                        data: {
+                            type: 'array',
+                            items: {
+                                $ref: '#/components/schemas/WorkspaceWithRole'
+                            }
+                        }
+                    }
+                },
+                GetWorkspaceResponse: {
+                    type: 'object',
+                    required: ['success', 'message', 'data'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: true
+                        },
+                        message: {
+                            type: 'string',
+                            example: 'Workspace retrieved successfully'
+                        },
+                        data: {
+                            $ref: '#/components/schemas/Workspace'
+                        }
+                    }
+                },
+                UpdateWorkspaceResponse: {
+                    type: 'object',
+                    required: ['success', 'message', 'data'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: true
+                        },
+                        message: {
+                            type: 'string',
+                            example: 'Workspace updated successfully'
+                        },
+                        data: {
+                            $ref: '#/components/schemas/Workspace'
+                        }
+                    }
+                },
+                DeleteWorkspaceResponse: {
+                    type: 'object',
+                    required: ['success', 'message'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: true
+                        },
+                        message: {
+                            type: 'string',
+                            example: 'Workspace deleted successfully'
+                        }
+                    }
+                },
                 RegisterResponse: {
                     type: 'object',
                     required: ['success', 'message', 'data'],
@@ -310,6 +502,21 @@ const swaggerOptions = {
                         message: {
                             type: 'string',
                             example: 'Invalid email or password'
+                        }
+                    }
+                },
+                ForbiddenErrorResponse: {
+                    type: 'object',
+                    required: ['success', 'message'],
+                    properties: {
+                        success: {
+                            type: 'boolean',
+                            example: false
+                        },
+                        message: {
+                            type: 'string',
+                            example:
+                                'You do not have access to this workspace'
                         }
                     }
                 },
