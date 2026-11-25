@@ -33,3 +33,18 @@ export const updateUserProfile = async (userId, userData) => {
 
     return updatedUser;
 };
+
+
+
+// Get another user's public profile
+export const getUserProfile = async (userId) => {
+    const user = await findUserById(userId);
+
+    if (!user) {
+        const error = new Error('User not found');
+        error.statusCode = 404;
+        throw error;
+    }
+
+    return user;
+};

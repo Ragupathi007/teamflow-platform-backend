@@ -97,3 +97,77 @@
  *             schema:
  *               $ref: '#/components/schemas/ServerErrorResponse'
  */
+
+/**
+ * @openapi
+ * /api/v1/users/{id}:
+ *   get:
+ *     tags:
+ *       - Users
+ *     summary: Get a user's public profile by ID
+ *     description: >
+ *       Returns the public profile of the user with the given ID. The request
+ *       must include a valid Bearer JWT, which is verified by the existing
+ *       `authenticate` middleware. Only public fields (id, name, email,
+ *       createdAt) are returned.
+ *     operationId: getUserById
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: UUID of the user to retrieve.
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           example: 0f8fad5b-d9cb-469f-a165-70867728950e
+ *     responses:
+ *       '200':
+ *         description: User profile retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetUserResponse'
+ *             example:
+ *               success: true
+ *               message: User profile retrieved successfully
+ *               data:
+ *                 id: 0f8fad5b-d9cb-469f-a165-70867728950e
+ *                 name: Ada Lovelace
+ *                 email: ada@example.com
+ *                 createdAt: '2026-11-24T12:00:00.000Z'
+ *       '401':
+ *         description: >
+ *           Authentication token is missing, invalid, or expired.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UnauthorizedErrorResponse'
+ *             examples:
+ *               missingToken:
+ *                 summary: Missing Authorization header
+ *                 value:
+ *                   success: false
+ *                   message: Authentication token is required
+ *               invalidToken:
+ *                 summary: Invalid or expired token
+ *                 value:
+ *                   success: false
+ *                   message: Invalid or expired authentication token
+ *       '404':
+ *         description: No user exists with the provided ID.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/NotFoundErrorResponse'
+ *             example:
+ *               success: false
+ *               message: User not found
+ *       '500':
+ *         description: Unexpected server or database error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ServerErrorResponse'
+ */

@@ -1,7 +1,7 @@
 
 import { Router } from 'express';
 
-import { updateMe } from '../controllers/user.controller.js';
+import { getUserById, updateMe } from '../controllers/user.controller.js';
 
 import { authenticate } from '../middleware/auth.middleware.js';
 import { validate } from '../middleware/validate.middleware.js';
@@ -17,5 +17,8 @@ router.patch(
     validate(updateUserSchema),
     updateMe
 );
+
+
+router.get('/:id', authenticate, getUserById);
 
 export default router;
